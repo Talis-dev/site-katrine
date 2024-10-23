@@ -101,17 +101,17 @@
     </video>
 
     <div class="content">
-        <button class="button" onclick="openModal()">Confirmar</button>
+        <button class="button" onclick="openModal()">Confirmar presença</button>
        
     </div>
 
         <!-- Modal -->
         <div id="myModal" class="modal">
             <div class="modal-content">
-                <h2>Confirmar minha presença</h2>
+                <h2>Confirme sua Presença</h2>
                 <input type="text" id="nome" placeholder="Digite seu nome">
-                <input type="email" id="email" placeholder="Digite seu email">
-                <button class="close-button" onclick="submitForm()">Enviar</button>
+                <button class="close-button" onclick="sendToWhatsApp()">Enviar</button>
+                <button class="close-button" onclick="closeModal()">Sair</button>
             </div>
         </div>
 
@@ -124,10 +124,20 @@
             document.getElementById("myModal").style.display = "none";
         }
 
-        function submitForm() {
+
+        function sendToWhatsApp() {
             var nome = document.getElementById("nome").value;
-            var email = document.getElementById("email").value;
-            alert("Nome: " + nome + "\nEmail: " + email);
+
+            var mensagem = `Oi, sou ${nome}! Confirmo minha presença no chá de bebê da princesinha 🎀Katrine🎁 no dia 24 de Novembro de 2024, às 14h. Aqui está o link para o endereço: https://g.co/kgs/yAupjDq R. João Colombo, 385 em Ariranha-SP.  Mal posso esperar para celebrar com vocês! 🎉👶💗`;
+
+            var numeroWhatsApp = '5517996642903';
+
+            // URL da API do WhatsApp
+            var url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
+
+            // Abrir o WhatsApp em uma nova janela
+            window.open(url, '_blank');
+
             closeModal();
         }
 
