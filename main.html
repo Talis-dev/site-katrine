@@ -109,34 +109,63 @@
         <div id="myModal" class="modal">
             <div class="modal-content">
                 <h2>Confirme sua Presença</h2>
-                <input type="text" id="nome" placeholder="Digite seu nome">
-                <button class="close-button" onclick="sendToWhatsApp()">Enviar</button>
-                <button class="close-button" onclick="closeModal()">Sair</button>
+                <form id="confirmationForm">
+                    <input type="text" name="nome" id="nome" placeholder="Seu nome" required>
+                    <button class="close-button" type="submit">Enviar Confirmação</button>
+                    <button class="close-button" type="button" onclick="closeModal()">Sair</button>
+                </form>
             </div>
         </div>
 
     <script>
 
+        // Função para abrir o modal
         function openModal() {
             document.getElementById("myModal").style.display = "flex";
         }
+
+        // Captura o evento de envio do formulário
+        document.getElementById('confirmationForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Previne o comportamento padrão de enviar o formulário
+
+            // Pega o nome do input
+            const nome = document.getElementById('nome').value;
+
+            // Envia para o Formspree usando a API Fetch
+            fetch("https://formspree.io/f/xvgogqjl", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    nome: nome
+                })
+            }).then(response => {
+                if (response.ok) {
+                    // Enviar mensagem para o WhatsApp
+                    enviarWhatsApp(nome);
+                } else {
+                    alert('Erro ao enviar confirmação. Tente novamente.');
+                }
+            });
+        });
+
         function closeModal() {
             document.getElementById("myModal").style.display = "none";
         }
 
 
-        function sendToWhatsApp() {
-            var nome = document.getElementById("nome").value;
+        function enviarWhatsApp(nome)  {         
 
-            var mensagem = `Oi, sou ${nome}! Confirmo minha presença no chá de bebê da princesinha 🎀Katrine🎁 no dia 24 de Novembro de 2024, às 14h. Aqui está o link para o endereço: https://g.co/kgs/yAupjDq R. João Colombo, 385 em Ariranha-SP.  Mal posso esperar para celebrar com vocês! 🎉👶💗`;
+            const  mensagem = `Oi, sou ${nome}! Confirmo minha presença no chá de bebê da princesinha 🎀Katrine🎁 no dia 24 de Novembro de 2024, às 14h. Aqui está o link para o endereço: https://g.co/kgs/yAupjDq R. João Colombo, 385 em Ariranha-SP.  Mal posso esperar para celebrar com vocês! 🎉👶💗`;
 
-            var numeroWhatsApp = '5517996642903';
+            const  numeroWhatsApp = '5517996642903';
 
             // URL da API do WhatsApp
-            var url = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
+            const urlWhatsApp = `https://api.whatsapp.com/send?phone=${numeroWhatsApp}&text=${encodeURIComponent(mensagem)}`;
 
-            // Abrir o WhatsApp em uma nova janela
-            window.open(url, '_blank');
+            // Redireciona o usuário para o WhatsApp
+            window.location.href = urlWhatsApp;
 
             closeModal();
         }
