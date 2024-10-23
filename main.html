@@ -14,12 +14,12 @@
 
         .video-background {
             background-color: #E37E75;
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
+           
             z-index: -1;
         }
 
@@ -118,6 +118,7 @@
         </div>
 
     <script>
+         ajustarVideo();
 
         // Função para abrir o modal
         function openModal() {
@@ -170,6 +171,15 @@
             closeModal();
         }
 
+        function ajustarVideo() {
+    const video = document.querySelector('.video-background');
+    if (window.innerWidth <= 768) { // Para smartphones
+        video.style.objectFit = 'cover'; // Altera para dispositivos menores
+    } else {
+        video.style.objectFit = 'contain'; // Mantém em telas maiores
+    }
+}
+window.addEventListener('resize', ajustarVideo);
     </script>
 </body>
 </html>
